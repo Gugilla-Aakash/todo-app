@@ -24,16 +24,14 @@ The app features smooth UX, localStorage persistence, live progress tracking, an
 
 🎥 Live Demo
 
-👉 (Paste your GitHub Pages OR Netlify link here)
-Example:
-https://gugilla-aakash.github.io/todo-app/
+👉 https://gugilla-aakash.github.io/todo-app/
 
 📸 Screenshots
 Desktop
+![Desktop Screenshot](screenshots/desktop.png)
 
 Mobile View
-
-(Insert screenshot file you already have)
+![Mobile Screenshot](screenshots/mobile.jpeg)
 
 🧠 What I Learned Building This
 
@@ -88,6 +86,9 @@ todo-app/
 │── .gitignore
 │── docs/
 │     └── demo.gif
+|── screenshots/
+      ├── desktop.png
+      └── mobile.jpeg
 │── img/
       ├── edit.png
       └── clear.png
