@@ -1,8 +1,5 @@
-// todo.js (fixed)
-
 let tasks = [];
 
-// helpers
 const saveTasks = () => {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
@@ -12,7 +9,7 @@ const loadTasks = () => {
   tasks = raw ? JSON.parse(raw) : [];
 };
 
-// add / edit / delete / toggle
+
 const addTask = () => {
   const taskInput = document.getElementById("taskInput");
   const text = taskInput.value.trim();
@@ -22,7 +19,7 @@ const addTask = () => {
   saveTasks();
   updateTasksList();
   updateStats();
-  clearBlastFlagIfNeeded(); // a safety
+  clearBlastFlagIfNeeded();
 };
 
 const toggleTaskComplete = (index) => {
@@ -45,7 +42,6 @@ const deleteTask = (index) => {
 const editTask = (index) => {
   const taskInput = document.getElementById("taskInput");
   taskInput.value = tasks[index].text;
-  // remove original item so that saving will create a new one
   tasks.splice(index, 1);
   saveTasks();
   updateTasksList();
@@ -53,15 +49,15 @@ const editTask = (index) => {
   clearBlastFlagIfNeeded();
 };
 
-// progress + stats
+
 const updateStats = () => {
   const completedTasks = tasks.filter((t) => t.completed).length;
   const totalTasks = tasks.length;
 
-  // correct progress calculation
+
   const progress = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
 
-  // get element first, then set
+
   const progressBar = document.getElementById("progress");
   if (progressBar) {
     progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
@@ -69,13 +65,13 @@ const updateStats = () => {
 
   document.getElementById("numbers").innerText = `${completedTasks} / ${totalTasks}`;
 
-  // only blast when there are tasks and all are complete
+
   if (totalTasks > 0 && completedTasks === totalTasks) {
     maybeBlast(totalTasks);
   }
 };
 
-// render task list
+
 const updateTasksList = () => {
   const taskList = document.getElementById("task-list");
   taskList.innerHTML = "";
@@ -121,26 +117,25 @@ const updateTasksList = () => {
     taskWrapper.appendChild(icons);
     listItem.appendChild(taskWrapper);
 
-    // checkbox listener
+
     checkbox.addEventListener("change", () => toggleTaskComplete(index));
     taskList.appendChild(listItem);
   });
 };
 
-// confetti / blast logic: avoid duplicate blasts if nothing changed
+
 const BLAST_KEY = "blast_for_count";
 
 const maybeBlast = (currentTotal) => {
-  // if we already blasted for this exact number of tasks, skip
+  
   const last = localStorage.getItem(BLAST_KEY);
   if (last && Number(last) === currentTotal) return;
-  // otherwise set the flag and blast
+  
   localStorage.setItem(BLAST_KEY, String(currentTotal));
   blast();
 };
 
 const clearBlastFlagIfNeeded = () => {
-  // clear blast flag if number of tasks changed or not all completed
   const last = localStorage.getItem(BLAST_KEY);
   const total = tasks.length;
   const completed = tasks.filter((t) => t.completed).length;
@@ -149,14 +144,13 @@ const clearBlastFlagIfNeeded = () => {
     localStorage.removeItem(BLAST_KEY);
     return;
   }
-  // if previously blasted but now not all complete, clear
   if (completed !== total) {
     localStorage.removeItem(BLAST_KEY);
   }
 };
 
 const blast = () => {
-  // fallback: if confetti missing, don't crash
+  
   if (typeof confetti !== "function") return;
   const end = Date.now() + 15 * 1000;
   const colors = ["#bb0000", "#ffffff"];
@@ -181,7 +175,7 @@ const blast = () => {
   })();
 };
 
-// initialization
+
 document.addEventListener("DOMContentLoaded", () => {
   loadTasks();
   updateTasksList();
